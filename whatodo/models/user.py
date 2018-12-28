@@ -1,16 +1,13 @@
 from ..app import db
 class User(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  uuid = db.Column(db.String(36), nullable=False)
+  uuid = db.Column(db.String(36), nullable=False, primary_key=True)
   email = db.Column(db.String(50), nullable=False)
   todoes = db.relationship('Todo', backref='user', lazy='select')
 
-  def __iter__(self):
-    return iter({
-      "id": self.id,
-      "uuid": self.uuid,
-      "todoes": self.todoes
-    }.items())
+  def __json__(self)->dict:
+    return {
+      "uuid": self.uuid
+    }
 
   @staticmethod
   def create(uuid:str, email:str):

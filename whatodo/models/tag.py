@@ -1,15 +1,13 @@
 from ..app import db
 class Tag(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  uuid = db.Column(db.String(36))
+  uuid = db.Column(db.String(36), primary_key=True)
   label = db.Column(db.Text, nullable=False)
 
-  def __iter__(self):
-    return iter({
-      "id": self.id,
+  def __json__(self)->dict:
+    return {
       "uuid": self.uuid,
       "label": self.label
-    }.items())
+    }
 
-  def __eq__(self, uuid:str):
+  def __eq__(self, uuid:str)->bool:
     return uuid == self.uuid

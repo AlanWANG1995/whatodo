@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+requests = "*"
+ptvsd = "*"
 
 [packages]
 flask = "==1.0.2"
