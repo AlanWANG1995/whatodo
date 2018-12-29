@@ -6,5 +6,8 @@
 # # Pause the program until a remote debugger is attached
 # ptvsd.wait_for_attach()
 
-from .app import app
+from .app import app, db
+db.init_app(app)
+app.app_context().push()
+db.create_all()
 app.run()

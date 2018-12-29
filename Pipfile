@@ -7,11 +7,12 @@ verify_ssl = true
 pylint = "*"
 requests = "*"
 ptvsd = "*"
+pytest = "*"
 
 [packages]
 flask = "==1.0.2"
 flask-sqlalchemy = "==2.3.1"
-whatodo = {editable = true,version = "*"}
+whatodo = {editable = true,path = "."}
 
 [requires]
 python_version = "3.6"

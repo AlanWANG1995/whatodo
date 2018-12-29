@@ -1,24 +1,20 @@
-from ..app import jsonify, request, app
-import json
 
-error_json = {
-  400: {"status": 400, "message": "invalid parameters"},
-  404: {'status': 404, "message": "not found"},
-  201: {"status": 201, "message": "created"},
-  409: {"status": 409, "message": "user exists"},
-  200: {"status": 200, "message": "ok."}
-}
+def before(pre_fn):
+  def wrapper(fn):
+    def _fn(*arg, **kwarg):
+      pre_fn(*arg, **kwarg)
+      return fn(*arg, **kwarg)
+    return _fn
+  return wrapper
 
-class ModelEncoder(json.JSONEncoder):
-  def default(self, obj):
-    if hasattr(obj, "__json__"):
-      return obj.__json__()
-    else:
-      return super().default(obj)
+def after(aft_fn):
+  def wrapper(fn):
+    def _fn(*arg, **kwarg):
+      v = fn(*arg, **kwarg)
+      aft_fn(*arg, **kwarg)
+      return v
+    return _fn
+  return wrapper
 
-def model_or_404(me):
-  return (jsonify(error_json[404]),404) if not me else app.response_class(
-        json.dumps(me, cls=ModelEncoder),
-        mimetype=app.config['JSONIFY_MIMETYPE']
-    )
+
 

@@ -2,14 +2,11 @@ import uuid
 from .helper import *
 from ..app import app,request, jsonify,db
 from ..models import Todo,User
-from ..models.helper import *
 
 @api
 def create(user:str, content:str):
   if User.contain(uuid=user):
     todo: Todo = Todo.create(uuid=str(uuid.uuid4()), content=content, user=user)
-    db.session.add(todo)
-    db.session.commit()
     return jsonify(error_json[201]), 201
   else:
     return jsonify(error_json[400]), 400

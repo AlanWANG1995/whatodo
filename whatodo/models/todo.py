@@ -16,12 +16,21 @@ class Todo(db.Model):
     todo.emergency_level = 0 if "emergency_level" not in kwarg else kwarg["emergency_level"]
     todo.finish = False if "finish" not in kwarg else kwarg["emergency_level"]
     todo.user_uuid = kwarg["user"]
+    db.session.add(todo)
+    db.session.commit()
     return todo
 
   @staticmethod
   def contain(uuid:str)->bool:
     return Todo.query.filter_by(uuid=uuid).first() is None
 
+  def save(self):
+    db.session.add(self)
+    db.session.commit()
+
+  def destroy(self):
+    db.session.delete(self)
+    db.session.commit()
 
   def __json__(self)->dict:
     return {
