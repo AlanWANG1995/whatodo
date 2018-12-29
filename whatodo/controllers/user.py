@@ -15,8 +15,20 @@ def create(email):
 @api
 def show(email=None, uuid=None):
   if email:
-    me = User.query.filter_by(email=email).first()
+    me = User.find(email=email)
     return model_or_404(me)
   else:
-    me = User.query.filter_by(uuid=uuid).first()
+    me = User.find(uuid=uuid)
     return model_or_404(me)
+
+@api
+def destroy(email=None, uuid=None):
+  if email:
+    me = User.find(email=email)
+  else:
+    me = User.find(uuid=uuid)
+  if me:
+    me.destroy()
+    return jsonify(error_json[200]), 200
+  else:
+    return jsonify(error_json[404]), 404

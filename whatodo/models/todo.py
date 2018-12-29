@@ -1,6 +1,4 @@
 from ..app import db
-from .user import User
-
 class Todo(db.Model):
   uuid = db.Column(db.String(36), primary_key=True)
   content = db.Column(db.Text, nullable=False)
@@ -14,7 +12,7 @@ class Todo(db.Model):
     todo.uuid = kwarg["uuid"]
     todo.content = kwarg["content"]
     todo.emergency_level = 0 if "emergency_level" not in kwarg else kwarg["emergency_level"]
-    todo.finish = False if "finish" not in kwarg else kwarg["emergency_level"]
+    todo.finish = False if "finish" not in kwarg else kwarg["finish"]
     todo.user_uuid = kwarg["user"]
     db.session.add(todo)
     db.session.commit()
@@ -22,7 +20,7 @@ class Todo(db.Model):
 
   @staticmethod
   def contain(uuid:str)->bool:
-    return Todo.query.filter_by(uuid=uuid).first() is None
+    return Todo.query.filter_by(uuid=uuid).first() is not None
 
   def save(self):
     db.session.add(self)

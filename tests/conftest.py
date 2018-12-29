@@ -17,6 +17,7 @@ def context():
   os.unlink(app.config["DATABASE"])
 
 
-@pytest.fixture
-def client():
-  pass
+@pytest.fixture(scope="class")
+def client(context):
+  with app.test_client() as c:
+    yield c

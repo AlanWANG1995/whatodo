@@ -1,5 +1,5 @@
 from ..app import db
-from . import Todo
+from .todo import Todo
 from .helper import *
 class User(db.Model):
   uuid = db.Column(db.String(36), nullable=False, primary_key=True)
@@ -19,6 +19,10 @@ class User(db.Model):
     db.session.add(user)
     db.session.commit()
     return user
+  
+  @staticmethod
+  def find(**kargs):
+    return User.query.filter_by(**kargs).first()
 
   def save(self):
     db.session.add(self)
@@ -30,7 +34,7 @@ class User(db.Model):
 
   def add_todo(self, *args, **kargs):
     kargs["user"] = self.uuid
-    Todo.create(*args, **kargs)
+    return Todo.create(*args, **kargs)
 
   @before(clear_todoes)
   def destroy(self):
